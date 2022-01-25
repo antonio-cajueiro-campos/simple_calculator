@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="estilo.css" />
+	<title>A Simple Calculator</title>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+	<form action="" class="calculator" name="calculator">
+		<input type="text" class="display" name="display" disabled>
+
+		<input type="button" class="numpad" name="reload" value="C" onclick="display.value=''"><br>
+
+		<input type="button" class="numpad" name="button9" value="9" onclick="displayNumber(button9.value)">
+		<input type="button" class="numpad" name="button8" value="8" onclick="displayNumber(button8.value)">
+		<input type="button" class="numpad" name="button7" value="7" onclick="displayNumber(button7.value)">
+		<input type="button" class="numpad blue" name="sum" value="+" onclick="displayNumber(sum.value)"><br>
+
+		<input type="button" class="numpad" name="button6" value="6" onclick="displayNumber(button6.value)">
+		<input type="button" class="numpad" name="button5" value="5" onclick="displayNumber(button5.value)">
+		<input type="button" class="numpad" name="button4" value="4" onclick="displayNumber(button4.value)">
+		<input type="button" class="numpad pink" name="subtract" value="-" onclick="displayNumber(subtract.value)"><br>
+
+		<input type="button" class="numpad" name="button3" value="3" onclick="displayNumber(button3.value)">
+		<input type="button" class="numpad" name="button2" value="2" onclick="displayNumber(button2.value)">
+		<input type="button" class="numpad" name="button1" value="1" onclick="displayNumber(button1.value)">
+		<input type="button" class="numpad green" name="multiply" value="*" onclick="displayNumber(multiply.value)"><br>
+
+		<input type="button" class="numpad" name="dot" value="." onclick="displayNumber(dot.value)">
+		<input type="button" class="numpad" name="button0" value="0" onclick="displayNumber(button0.value)">
+		<input type="button" class="numpad purple" name="equal" value="=" onclick="calculate(display.value)">
+		<input type="button" class="numpad orange" name="divide" value="/" onclick="displayNumber(divide.value)"><br>
+	</form>
+	<script>
+		function displayNumber(number) {
+			calculator.display.value = calculator.display.value.concat(number);
+		}
+
+		function calculate(expression) {
+			let result;
+			try {
+				result = eval(expression);
+				if (result == undefined) throw new Error("Valor Indefinido");
+				calculator.display.value = result;
+			} catch (e) {
+				e = e.toString().replace("SyntaxError", "Erro na expressão");
+				e = e.toString().replace("Unexpected token", "valor inesperado");
+				e = e.toString().replace("Unexpected end of input", "valor final inesperado");
+				e = e.toString().replace("Unary operator used immediately before exponentiation expression. Parenthesis must be used to disambiguate operator precedence", "Operador unário usado imediatamente antes da expressão de exponenciação. Os parênteses devem ser usados para desambiguar a precedência do operador");
+				e = e.toString().replace("Invalid left-hand side expression in postfix operation","Expressão do lado esquerdo inválida na operação postfix");
+
+				const Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: toast => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				});
+				  
+				Toast.fire({
+					icon: 'error',
+					title: e,
+					showClass: {
+						popup: 'popup'
+					}
+				});
+			}
+		}
+	</script>
+</body>
+</html>
